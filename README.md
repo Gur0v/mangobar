@@ -114,6 +114,6 @@ For one output:
 - Keyboard layout uses fast bounded `mmsg -g -k` polling because the watch/event path does not update properly right now.
 - Volume uses `wpctl`, not `pactl`.
 
-## Status
+## License
 
-Small, personal, and good enough to live on my desktop.
+[GPL-3.0](LICENSE)
