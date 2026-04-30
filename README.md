@@ -87,6 +87,12 @@ Build:
 cargo build --release
 ```
 
+Install:
+
+```sh
+sudo install -Dm755 target/release/mangobar /usr/local/bin/mangobar
+```
+
 Binary:
 
 ```text

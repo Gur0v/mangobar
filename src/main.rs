@@ -39,8 +39,7 @@ fn main() -> glib::ExitCode {
     install_log_filter();
 
     let args = parse_args();
-    let runtime = tokio::runtime::Builder::new_multi_thread()
-        .worker_threads(1)
+    let runtime = tokio::runtime::Builder::new_current_thread()
         .enable_io()
         .enable_time()
         .build()

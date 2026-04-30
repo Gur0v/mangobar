@@ -1,13 +1,13 @@
 [package]
 name = "mangobar"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 
 [dependencies]
 gtk = { package = "gtk4", version = "0.11" }
 gtk4-layer-shell = "0.8"
 libc = "0.2"
-tokio = { version = "1", features = ["macros", "process", "rt-multi-thread", "sync", "time"] }
+tokio = { version = "1", features = ["macros", "process", "rt", "sync", "time"] }
 wayland-client = "0.31"
 wayland-backend = "0.3"
 wayland-scanner = "0.31"
