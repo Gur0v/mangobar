@@ -17,7 +17,7 @@ It shows:
 - a plain black background
 - no extra visual noise
 
-The right side is basically a less-native `i3status-dumb` built into the bar.
+The right side is basically a less-native [`i3status-dumb`](https://github.com/Gur0v/i3status-dumb) built into the bar.
 
 It renders this kind of line:
 
