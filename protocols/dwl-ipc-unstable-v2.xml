@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<protocol name="dwl_ipc_unstable_v2">
+  <interface name="zdwl_ipc_manager_v2" version="2">
+    <request name="release" type="destructor"/>
+    <request name="get_output">
+      <arg name="id" type="new_id" interface="zdwl_ipc_output_v2"/>
+      <arg name="output" type="object" interface="wl_output"/>
+    </request>
+    <event name="tags"><arg name="amount" type="uint"/></event>
+    <event name="layout"><arg name="name" type="string"/></event>
+  </interface>
+  <interface name="zdwl_ipc_output_v2" version="2">
+    <enum name="tag_state">
+      <entry name="none" value="0"/>
+      <entry name="active" value="1"/>
+      <entry name="urgent" value="2"/>
+    </enum>
+    <request name="release" type="destructor"/>
+    <event name="toggle_visibility"/>
+    <event name="active"><arg name="active" type="uint"/></event>
+    <event name="tag">
+      <arg name="tag" type="uint"/>
+      <arg name="state" type="uint" enum="tag_state"/>
+      <arg name="clients" type="uint"/>
+      <arg name="focused" type="uint"/>
+    </event>
+    <event name="layout"><arg name="layout" type="uint"/></event>
+    <event name="title"><arg name="title" type="string"/></event>
+    <event name="appid" since="1"><arg name="appid" type="string"/></event>
+    <event name="layout_symbol" since="1"><arg name="layout" type="string"/></event>
+    <event name="frame"/>
+    <request name="set_tags">
+      <arg name="tagmask" type="uint"/>
+      <arg name="toggle_tagset" type="uint"/>
+    </request>
+    <request name="set_client_tags"><arg name="and_tags" type="uint"/><arg name="xor_tags" type="uint"/></request>
+    <request name="set_layout"><arg name="index" type="uint"/></request>
+    <request name="quit" since="2"/>
+    <request name="dispatch" since="2">
+      <arg name="dispatch" type="string"/><arg name="arg1" type="string"/><arg name="arg2" type="string"/>
+      <arg name="arg3" type="string"/><arg name="arg4" type="string"/><arg name="arg5" type="string"/>
+    </request>
+    <event name="fullscreen" since="2"><arg name="is_fullscreen" type="uint"/></event>
+    <event name="floating" since="2"><arg name="is_floating" type="uint"/></event>
+    <event name="x" since="2"><arg name="x" type="int"/></event>
+    <event name="y" since="2"><arg name="y" type="int"/></event>
+    <event name="width" since="2"><arg name="width" type="int"/></event>
+    <event name="height" since="2"><arg name="height" type="int"/></event>
+    <event name="last_layer" since="2"><arg name="last_layer" type="string"/></event>
+    <event name="kb_layout" since="2"><arg name="kb_layout" type="string"/></event>
+    <event name="keymode" since="2"><arg name="keymode" type="string"/></event>
+    <event name="scalefactor" since="2"><arg name="scalefactor" type="uint"/></event>
+  </interface>
+</protocol>
