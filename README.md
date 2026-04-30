@@ -29,7 +29,7 @@ There is no separate `status_command`. The status lives inside the bar.
 
 ## Backstory
 
-After switching to mangowc, I started missing the simple ass look of `swaybar`.
+After switching to mangowc, I started missing the simple look of `swaybar`.
 
 So I tried the bars people usually use on wlroots window managers.
 
