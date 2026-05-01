@@ -1,3 +1,4 @@
+use crate::settings::{LAYOUT_INTERVAL_MS, LAYOUT_TIMEOUT_MS};
 use crate::status::LayoutState;
 use std::time::Duration;
 use tokio::process::Command;
@@ -7,13 +8,16 @@ use tokio::time::{MissedTickBehavior, interval};
 
 pub fn spawn(handle: &Handle, output: Option<String>, tx: watch::Sender<LayoutState>) {
     handle.spawn(async move {
-        let mut tick = interval(Duration::from_millis(100));
+        let mut tick = interval(Duration::from_millis(LAYOUT_INTERVAL_MS));
         tick.set_missed_tick_behavior(MissedTickBehavior::Skip);
 
         loop {
             tick.tick().await;
-            if let Ok(Ok(layout)) =
-                tokio::time::timeout(Duration::from_millis(80), current(output.as_deref())).await
+            if let Ok(Ok(layout)) = tokio::time::timeout(
+                Duration::from_millis(LAYOUT_TIMEOUT_MS),
+                current(output.as_deref()),
+            )
+            .await
             {
                 publish(&tx, layout);
             }

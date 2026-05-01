@@ -1,7 +1,10 @@
 [package]
 name = "mangobar"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
+license = "GPL-3.0"
+repository = "https://github.com/Gur0v/mangobar"
+description = "A tiny mangowc bar with swaybar energy"
 
 [dependencies]
 gtk = { package = "gtk4", version = "0.11" }

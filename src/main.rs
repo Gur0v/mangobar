@@ -1,6 +1,7 @@
 mod clock;
 mod layout;
 mod mango_ipc;
+mod settings;
 mod status;
 mod tags;
 mod volume;
@@ -13,6 +14,7 @@ use gtk::{
 };
 use gtk4_layer_shell::{Edge, KeyboardMode, Layer, LayerShell};
 use mango_ipc::MangoEvent;
+use settings::*;
 use std::cell::RefCell;
 use std::env;
 use std::process::Command as StdCommand;
@@ -25,9 +27,6 @@ use tokio::sync::watch;
 
 pub use status::LayoutState;
 pub use tags::Tag;
-
-const APP_ID: &str = "dev.mangowm.mangobar";
-const HEIGHT: i32 = 20;
 
 #[derive(Clone, Debug, Default)]
 struct Args {
@@ -148,7 +147,7 @@ fn build_ui(app: &Application, args: Args, handle: Handle) {
     layout::spawn(&handle, args.output.clone(), layout_tx.clone());
     spawn_status(&handle, layout_rx, status_tx);
 
-    glib::timeout_add_local(Duration::from_millis(16), move || {
+    glib::timeout_add_local(Duration::from_millis(UI_TICK_MS), move || {
         while let Ok(event) = ipc_rx.try_recv() {
             match event {
                 MangoEvent::Tags(next) => {
@@ -181,15 +180,15 @@ fn build_window(app: &Application, width: i32) -> ApplicationWindow {
     window.set_anchor(Edge::Bottom, true);
     window.set_anchor(Edge::Left, true);
     window.set_anchor(Edge::Right, true);
-    window.set_exclusive_zone(HEIGHT);
-    window.set_default_size(width, HEIGHT);
+    window.set_exclusive_zone(BAR_HEIGHT);
+    window.set_default_size(width, BAR_HEIGHT);
     window.set_width_request(width);
     window
 }
 
 fn build_root(width: i32) -> gtk::Box {
     let root = gtk::Box::new(Orientation::Horizontal, 0);
-    root.set_height_request(HEIGHT);
+    root.set_height_request(BAR_HEIGHT);
     root.set_width_request(width);
     root.set_halign(gtk::Align::Fill);
     root.set_hexpand(true);
@@ -303,38 +302,38 @@ fn monitor_width() -> i32 {
 
 fn install_css() {
     let provider = CssProvider::new();
-    provider.load_from_data(
-        r#"
-        window { background: #000000; }
+    provider.load_from_data(&format!(
+        "
+        window {{ background: {BACKGROUND}; }}
 
-        .bar {
-            background: #000000;
-            color: #ffffff;
-            font: 12px "JetBrainsMono Nerd Font";
-        }
+        .bar {{
+            background: {BACKGROUND};
+            color: {FOREGROUND};
+            font: {FONT};
+        }}
 
-        .tags { margin-left: 6px; }
+        .tags {{ margin-left: {LEFT_PADDING}px; }}
 
-        .status {
-            margin-right: 6px;
-            color: #ffffff;
-        }
+        .status {{
+            margin-right: {RIGHT_PADDING}px;
+            color: {FOREGROUND};
+        }}
 
-        button.tag {
-            min-width: 16px;
-            min-height: 14px;
+        button.tag {{
+            min-width: {TAG_MIN_WIDTH}px;
+            min-height: {TAG_MIN_HEIGHT}px;
             margin: 1px 4px 1px 0;
             padding: 0;
             border: 0;
             border-radius: 0;
-            background: #000000;
-            color: rgba(255, 255, 255, 0.55);
-        }
+            background: {BACKGROUND};
+            color: {DIM_FOREGROUND};
+        }}
 
-        button.tag.active { color: #ffffff; }
-        button.tag.urgent { color: #ffffff; }
-        "#,
-    );
+        button.tag.active {{ color: {FOREGROUND}; }}
+        button.tag.urgent {{ color: {FOREGROUND}; }}
+        "
+    ));
 
     if let Some(display) = gtk::gdk::Display::default() {
         gtk::style_context_add_provider_for_display(

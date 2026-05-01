@@ -46,7 +46,67 @@ So this is a small bar for mangowc that tries to feel like my old swaybar setup,
 - `src/volume.rs` uses `wpctl get-volume @DEFAULT_AUDIO_SINK@` for volume.
 - `src/clock.rs` updates the clock once per second.
 - `src/status.rs` renders the right-side status text.
+- `src/settings.rs` contains the obvious values people are expected to tweak first.
 - `src/main.rs` handles GTK, layer-shell, rendering, clicks, and scroll switching.
+
+## Patching
+
+This project is meant to be patched, not configured.
+
+The idea is to keep the default code small and readable enough that changing it is easier than inventing a config format.
+
+Start here:
+
+- `src/settings.rs`
+  Change bar height, font, colors, padding, tag size, and polling intervals.
+- `src/status.rs`
+  Change the right-side status format. This is where `volume layout clock` becomes whatever order or text you want.
+- `src/volume.rs`
+  Change how volume is read. Right now it shells out to `wpctl`.
+- `src/layout.rs`
+  Change keyboard layout behavior. Right now it polls `mmsg -g -k` because the watch path does not update for me.
+- `src/clock.rs`
+  Change the clock format or tick behavior.
+- `src/main.rs`
+  Change GTK layout, CSS classes, click behavior, scroll behavior, and workspace rendering.
+- `src/mango_ipc.rs`
+  Change direct mangowc IPC behavior. Most people should not need to touch this unless they want more compositor state.
+
+Common tweaks:
+
+- Bar height: `BAR_HEIGHT` in `src/settings.rs`
+- Font: `FONT` in `src/settings.rs`
+- Background/text colors: `BACKGROUND`, `FOREGROUND`, and `DIM_FOREGROUND` in `src/settings.rs`
+- Workspace spacing: `LEFT_PADDING`, `TAG_MIN_WIDTH`, and `TAG_MIN_HEIGHT` in `src/settings.rs`
+- Status text order: `render()` in `src/status.rs`
+- Volume refresh speed: `VOLUME_INTERVAL_MS` and `VOLUME_TIMEOUT_MS` in `src/settings.rs`
+- Layout refresh speed: `LAYOUT_INTERVAL_MS` and `LAYOUT_TIMEOUT_MS` in `src/settings.rs`
+
+The CSS is generated in `src/main.rs` from values in `src/settings.rs`, so basic visual tweaks should not require digging through a giant stylesheet.
+
+## Source Map
+
+If you want to patch one thing, start here:
+
+| Goal | File |
+| :-- | :-- |
+| Change colors/font/height/spacing | `src/settings.rs` |
+| Change workspace visibility or click behavior | `src/main.rs` |
+| Change scroll behavior | `src/main.rs` |
+| Change status order/text | `src/status.rs` |
+| Change volume command/parsing | `src/volume.rs` |
+| Change keyboard layout command/parsing | `src/layout.rs` |
+| Change clock format | `src/clock.rs` |
+| Add more mangowc IPC state | `src/mango_ipc.rs` |
+| Update generated IPC protocol | `protocols/dwl-ipc-unstable-v2.xml` |
+
+Recommended patch flow:
+
+```sh
+make fmt
+make check
+cargo build --release
+```
 
 ## Controls
 
@@ -87,10 +147,31 @@ Build:
 cargo build --release
 ```
 
+Or:
+
+```sh
+make build
+```
+
 Install:
 
 ```sh
 sudo install -Dm755 target/release/mangobar /usr/local/bin/mangobar
+```
+
+Or:
+
+```sh
+sudo make install
+```
+
+Useful development commands:
+
+```sh
+make fmt
+make check
+make run
+make clean
 ```
 
 Binary:

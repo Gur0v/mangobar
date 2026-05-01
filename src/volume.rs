@@ -1,3 +1,4 @@
+use crate::settings::{VOLUME_INTERVAL_MS, VOLUME_TIMEOUT_MS};
 use crate::status::VolumeState;
 use std::time::Duration;
 use tokio::process::Command;
@@ -6,12 +7,12 @@ use tokio::time::{MissedTickBehavior, interval};
 
 pub fn spawn(tx: watch::Sender<VolumeState>) {
     tokio::spawn(async move {
-        let mut tick = interval(Duration::from_millis(100));
+        let mut tick = interval(Duration::from_millis(VOLUME_INTERVAL_MS));
         tick.set_missed_tick_behavior(MissedTickBehavior::Skip);
 
         loop {
             tick.tick().await;
-            let next = tokio::time::timeout(Duration::from_millis(80), current())
+            let next = tokio::time::timeout(Duration::from_millis(VOLUME_TIMEOUT_MS), current())
                 .await
                 .ok()
                 .and_then(Result::ok)

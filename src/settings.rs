@@ -1,0 +1,15 @@
+pub const APP_ID: &str = "dev.mangowm.mangobar";
+pub const BAR_HEIGHT: i32 = 22;
+pub const UI_TICK_MS: u64 = 16;
+pub const VOLUME_INTERVAL_MS: u64 = 100;
+pub const VOLUME_TIMEOUT_MS: u64 = 80;
+pub const LAYOUT_INTERVAL_MS: u64 = 100;
+pub const LAYOUT_TIMEOUT_MS: u64 = 80;
+pub const FONT: &str = "12px \"JetBrainsMono Nerd Font\"";
+pub const BACKGROUND: &str = "#000000";
+pub const FOREGROUND: &str = "#ffffff";
+pub const DIM_FOREGROUND: &str = "rgba(255, 255, 255, 0.55)";
+pub const LEFT_PADDING: i32 = 6;
+pub const RIGHT_PADDING: i32 = 6;
+pub const TAG_MIN_WIDTH: i32 = 16;
+pub const TAG_MIN_HEIGHT: i32 = 14;
