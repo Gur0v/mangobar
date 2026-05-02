@@ -1,6 +1,6 @@
 # mangobar
 
-A tiny status bar for mangowc with swaybar energy.
+A suckless-esc status bar for mangowc with swaybar energy.
 
 ![Preview](PREVIEW.png)
 
