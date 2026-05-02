@@ -12,8 +12,6 @@ The status line is basically a less-native [i3status-dumb](https://github.com/Gu
 42% us 2026-04-24 09:49:57 PM
 ```
 
----
-
 ## What It Is
 
 mangobar is a small Rust bar for mangowc. It shows:
